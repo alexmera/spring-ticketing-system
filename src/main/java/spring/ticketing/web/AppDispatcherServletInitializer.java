@@ -2,6 +2,7 @@ package spring.ticketing.web;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 import spring.ticketing.config.AppConfig;
+import spring.ticketing.config.DataSourceConfig;
 import spring.ticketing.config.MvcConfig;
 
 public class AppDispatcherServletInitializer
@@ -10,7 +11,8 @@ public class AppDispatcherServletInitializer
   @Override
   protected Class<?>[] getRootConfigClasses() {
     return new Class[]{
-        AppConfig.class
+        AppConfig.class,
+        DataSourceConfig.class
     };
   }
 
