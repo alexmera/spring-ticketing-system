@@ -39,11 +39,13 @@ public class AppUserJdbcDao implements AppUserDao {
   }
 
   @Override
-  public AppUser create(AppUser entity) {
+  public AppUser create(AppUser entity, String rawPassword) {
     Map<String, Object> args = new HashMap<>();
     args.put("user_name", entity.getUserName());
     args.put("user_email", entity.getUserEmail());
     args.put("rol", entity.getRol().name());
+    // FIXME DANGER!!!!!!!!!
+    args.put("password", rawPassword);
 
     Number id = jdbcInsert.executeAndReturnKey(args);
     return getOne(id.intValue());
