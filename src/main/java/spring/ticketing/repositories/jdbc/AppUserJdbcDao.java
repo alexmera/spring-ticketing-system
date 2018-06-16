@@ -3,11 +3,10 @@ package spring.ticketing.repositories.jdbc;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsertOperations;
 import org.springframework.stereotype.Repository;
@@ -19,14 +18,12 @@ import spring.ticketing.repositories.AppUserDao;
 @Repository
 public class AppUserJdbcDao implements AppUserDao {
 
-  private static final ResultSetExtractor<AppUser> rsExtractor = (rs) ->
-      new AppUserData(
-          rs.getInt("id"),
-          rs.getString("user_name"),
-          rs.getString("user_email"),
-          AppUserRol.valueOf(rs.getString("rol"))
-      );
-  private static final RowMapper<AppUser> rowMapper = (rs, rowNum) -> rsExtractor.extractData(rs);
+  private static final RowMapper<AppUser> rowMapper = (rs, rowNum) -> new AppUserData(
+      rs.getInt("id"),
+      rs.getString("user_name"),
+      rs.getString("user_email"),
+      AppUserRol.valueOf(rs.getString("rol"))
+  );
   private final JdbcOperations jdbc;
   private final SimpleJdbcInsertOperations jdbcInsert;
 
@@ -53,18 +50,16 @@ public class AppUserJdbcDao implements AppUserDao {
 
   @Override
   public AppUser getOne(Integer id) {
-    return findById(id).orElseThrow(() ->
-        new NoSuchElementException("AppUser not found - id: " + id)
-    );
+    return jdbc.queryForObject("SELECT * FROM app_user WHERE id = ?", rowMapper, id);
   }
 
   @Override
   public Optional<AppUser> findById(Integer id) {
-    AppUser appUser = jdbc.query("SELECT * FROM app_user WHERE id = ?", rsExtractor, id);
-    if (appUser != null) {
-      return Optional.of(appUser);
+    try {
+      return Optional.of(getOne(id));
+    } catch (EmptyResultDataAccessException e) {
+      return Optional.empty();
     }
-    return Optional.empty();
   }
 
   @Override
