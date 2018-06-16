@@ -9,9 +9,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsertOperations;
 import spring.ticketing.repositories.jdbc.AppUserJdbcDao;
+import spring.ticketing.services.AppUserSpringService;
 
 @Configuration
-@ComponentScan(basePackageClasses = {AppUserJdbcDao.class})
+@ComponentScan(basePackageClasses = {AppUserJdbcDao.class, AppUserSpringService.class})
 public class AppConfig {
 
   @Bean

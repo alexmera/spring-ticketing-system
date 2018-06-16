@@ -1,0 +1,35 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head lang="es" th:replace="layout :: head" >
+</head>
+<body>
+<div class="container" th:replace="layout :: navbar">
+</div>
+<div class="container">
+  <div class="jumbotron">
+    <h1 class="display-4">Usuarios</h1>
+  </div>
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Usuario</th>
+      <th scope="col">Email</th>
+      <th scope="col">Rol</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+      <th scope="row" th:text="${user.id}">1</th>
+      <td th:text="${user.userName}">Mark</td>
+      <td th:text="${user.userEmail}">Otto</td>
+      <td th:text="${user.rol}">Otto</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Before body close -->
+<th:block th:include="layout :: beforeBodyClose"/>
+</body>
+</html>
