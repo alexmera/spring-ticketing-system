@@ -1,6 +1,6 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="head">
+<head th:fragment="head" th:attr="lang=${#locale}">
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -23,13 +23,20 @@
             aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-item nav-link" href="" th:href="@{/}">Inicio <span
+        <a class="nav-item nav-link" href="" th:href="@{/}" th:text="#{nav.home}">home<span
             class="sr-only">(current)</span></a>
-        <a class="nav-item nav-link" href="" th:href="@{/users}">Usuarios</a>
-        <a class="nav-item nav-link" href="" th:href="@{/tickets}">Tickets</a>
-        <a class="ml-2 nav-item btn btn-primary" href="#" role="button">Crear ticket</a>
+        <a class="nav-item nav-link" href="" th:href="@{/users}" th:text="#{nav.users}">users</a>
+        <a class="nav-item nav-link" href="" th:href="@{/clients}" th:text="#{nav.clients}">clients</a>
+        <a class="nav-item nav-link" href="" th:href="@{/tickets}"
+           th:text="#{nav.tickets}">tickets</a>
+      </div>
+      <div class="navbar-nav">
+        <a class="ml-2 nav-item btn btn-primary" href="#" role="button"
+           th:text="#{nav.createTicket}">createTicket</a>
+        <a class="ml-2 nav-item btn btn-secondary" th:href="${#locale.language == 'es'} ? '?lang=en' : '?lang=es'" role="button"
+           th:text="${#locale.language == 'es'} ? 'English' : 'Español '">createTicket</a>
       </div>
     </div>
   </nav>

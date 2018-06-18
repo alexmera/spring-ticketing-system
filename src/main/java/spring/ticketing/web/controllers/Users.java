@@ -1,6 +1,8 @@
 package spring.ticketing.web.controllers;
 
+import java.util.Locale;
 import java.util.Optional;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,18 +13,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring.ticketing.model.AppUser;
+import spring.ticketing.model.AppUserRol;
 import spring.ticketing.model.data.AppUserData;
 import spring.ticketing.services.AppUserService;
 import spring.ticketing.web.model.Alerts;
+import spring.ticketing.web.model.SelectOptions;
 
 @Controller
 @RequestMapping("/users")
 public class Users {
 
   private final AppUserService appUserService;
+  private final MessageSource messageSource;
 
-  public Users(AppUserService appUserService) {
+  public Users(AppUserService appUserService, MessageSource messageSource) {
     this.appUserService = appUserService;
+    this.messageSource = messageSource;
   }
 
   @ModelAttribute("user")
@@ -45,6 +51,11 @@ public class Users {
     return new Alerts();
   }
 
+  @ModelAttribute("userRoles")
+  public SelectOptions userRoles() {
+    return new SelectOptions(AppUserRol.class);
+  }
+
   @GetMapping
   public String list(Model model) {
     model.addAttribute("users", appUserService.allUsers());
@@ -61,15 +72,17 @@ public class Users {
       @ModelAttribute("user") AppUserData user,
       @ModelAttribute Alerts alerts,
       @RequestParam("password") Optional<String> rawPassword,
+      Locale locale,
       RedirectAttributes redirectAttributes
   ) {
     if (user.getId() == null) {
       appUserService.createUser(user, rawPassword.get());
-      alerts.succes(String.format("El usuario %s fue creado exitosamente.", user.getUserName()));
+      alerts.succes(
+          messageSource.getMessage("users.msg.createOk", new Object[]{user.getUserName()}, locale));
     } else {
       appUserService.updateUser(user);
-      alerts
-          .succes(String.format("El usuario %s fue actualizado exitosamente.", user.getUserName()));
+      alerts.succes(
+          messageSource.getMessage("users.msg.updateOk", new Object[]{user.getUserName()}, locale));
     }
 
     redirectAttributes.addFlashAttribute("alerts", alerts);
@@ -85,10 +98,13 @@ public class Users {
   public String delete(
       @PathVariable("id") Integer id,
       @ModelAttribute Alerts alerts,
+      Locale locale,
       RedirectAttributes redirectAttributes
   ) {
     AppUser user = appUserService.deleteUser(id);
-    alerts.succes(String.format("El usuario %s fue eiliminado exitosamente.", user.getUserName()));
+    alerts.succes(
+        messageSource
+            .getMessage("users.msg.deleteOk", new Object[]{user.getUserName()}, locale));
     redirectAttributes.addFlashAttribute("alerts", alerts);
     return "redirect:/users";
   }

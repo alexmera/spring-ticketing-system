@@ -1,36 +1,44 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head lang="es" th:replace="layout :: head" >
+<head th:replace="layout :: head">
 </head>
 <body>
 <div class="container" th:replace="layout :: navbar">
 </div>
 <div class="container">
   <div class="jumbotron">
-    <h1 class="display-4">Crear usuario</h1>
+    <h1 class="display-4" th:text="#{users.form.h1}">Crear usuario</h1>
   </div>
   <form th:action="@{/users/save}" th:object="${user}" method="post">
     <div class="form-group">
-      <label for="userName">Nombre de usuario</label>
-      <input th:field="*{userName}" type="text" class="form-control" id="userName" name="userName" placeholder="Nombre de usuario">
+      <label for="userName" th:text="#{users.form.user}">Nombre de usuario</label>
+      <input th:field="*{userName}" type="text" class="form-control" id="userName" name="userName">
     </div>
     <div class="form-group">
-      <label for="userEmail">Email</label>
-      <input th:field="*{userEmail}" type="email" class="form-control" id="userEmail" name="userEmail" placeholder="Email">
+      <label for="userEmail" th:text="#{users.form.email}">Email</label>
+      <input th:field="*{userEmail}" type="email" class="form-control" id="userEmail"
+             name="userEmail">
     </div>
     <div class="form-group">
-      <label for="rol">Rol</label>
-      <input th:field="*{rol}" type="text" class="form-control" id="rol" name="rol" placeholder="Rol">
+      <label for="rol" th:text="#{users.form.role}">Rol</label>
+      <select class="form-control" id="rol" name="rol" th:field="*{rol}">
+        <option value=""></option>
+        <option th:each="rol : ${userRoles}"
+                th:value="${rol.value}"
+                th:text="#{${rol.captionCode}}">--
+        </option>
+      </select>
     </div>
     <div class="form-group" th:if="${user.id == null}">
-      <label for="password">Clave</label>
-      <input type="password" class="form-control" id="password" name="password" placeholder="Clave">
+      <label for="password" th:text="#{users.form.password}">Clave</label>
+      <input type="password" class="form-control" id="password" name="password">
     </div>
-    <input type="hidden" th:field="*{id}" />
+    <input type="hidden" th:field="*{id}"/>
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
-        <button type="submit" class="btn btn-primary">Guardar</button>
-        <a class="btn btn-default" href="#" th:href="@{/users}" role="button">Cancelar</a>
+        <button type="submit" class="btn btn-primary" th:text="#{global.save}">Guardar</button>
+        <a class="btn btn-default" href="#" th:href="@{/users}" role="button"
+           th:text="#{global.cancel}">Cancelar</a>
       </div>
     </div>
   </form>
