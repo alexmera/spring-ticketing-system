@@ -19,7 +19,7 @@ public class AppUserData implements AppUser {
   @Nonnull
   private AppUserRol rol;
 
-  private AppUserData() {
+  public AppUserData() {
   }
 
   public AppUserData(

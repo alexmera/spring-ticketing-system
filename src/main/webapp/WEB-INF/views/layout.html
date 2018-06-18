@@ -18,18 +18,31 @@
 <div class="container" th:fragment="navbar">
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="#">TICKETS</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
+            aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-item nav-link" href="" th:href="@{/}">Inicio <span class="sr-only">(current)</span></a>
+        <a class="nav-item nav-link" href="" th:href="@{/}">Inicio <span
+            class="sr-only">(current)</span></a>
         <a class="nav-item nav-link" href="" th:href="@{/users}">Usuarios</a>
         <a class="nav-item nav-link" href="" th:href="@{/tickets}">Tickets</a>
         <a class="ml-2 nav-item btn btn-primary" href="#" role="button">Crear ticket</a>
       </div>
     </div>
   </nav>
+</div>
+
+<div th:fragment="alerts">
+  <div th:each="alert : ${alerts}" th:classappend="${alert.className}"
+       class="alert alert-dismissible fade show" role="alert">
+    <p class="mb-0" th:text="${alert.message}"></p>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
 </div>
 
 <th:block th:fragment="beforeBodyClose">
