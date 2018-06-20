@@ -10,10 +10,10 @@ import spring.ticketing.model.AppUser;
 public interface AppUserService {
 
   @Nonnull
-  List<AppUser> allUsers();
+  <T extends AppUser> List<T> allUsers();
 
   @Nonnull
-  Optional<AppUser> findUserById(Integer id);
+  <T extends AppUser> Optional<T> findUserById(Integer id);
 
   @Nonnull
   AppUser createUser(AppUser appUser, String password);
