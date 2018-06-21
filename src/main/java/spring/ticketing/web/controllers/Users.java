@@ -2,9 +2,11 @@ package spring.ticketing.web.controllers;
 
 import java.util.Locale;
 import java.util.Optional;
+import javax.validation.Valid;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -69,13 +71,24 @@ public class Users {
 
   @PostMapping("/save")
   public String save(
-      @ModelAttribute("user") AppUserData user,
-      @ModelAttribute Alerts alerts,
+      @Valid @ModelAttribute("user") AppUserData user,
+      BindingResult userResult,
       @RequestParam("password") Optional<String> rawPassword,
+      Model model,
       Locale locale,
       RedirectAttributes redirectAttributes
   ) {
+    Alerts alerts = new Alerts();
+    if (userResult.hasErrors()) {
+      return "user-form";
+    }
     if (user.getId() == null) {
+      if(rawPassword.get().isEmpty()) {
+        alerts.danger(
+            messageSource.getMessage("users.msg.passwordRequired", null, locale));
+        model.addAttribute("alerts", alerts);
+        return "user-form";
+      }
       appUserService.createUser(user, rawPassword.get());
       alerts.succes(
           messageSource.getMessage("users.msg.createOk", new Object[]{user.getUserName()}, locale));

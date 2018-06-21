@@ -9,25 +9,57 @@
   <div class="jumbotron">
     <h1 class="display-4" th:text="#{users.form.h1}">Crear usuario</h1>
   </div>
+
+  <div th:replace="layout :: alerts">
+  </div>
+
   <form th:action="@{/users/save}" th:object="${user}" method="post">
     <div class="form-group">
       <label for="userName" th:text="#{users.form.user}">Nombre de usuario</label>
-      <input th:field="*{userName}" type="text" class="form-control" id="userName" name="userName">
+      <input
+          type="text"
+          class="form-control"
+          id="userName"
+          name="userName"
+          th:field="*{userName}"
+          th:classappend="${#fields.hasErrors('userName')} ? 'is-invalid' : ''"
+      >
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}">
+        error
+      </div>
     </div>
     <div class="form-group">
       <label for="userEmail" th:text="#{users.form.email}">Email</label>
-      <input th:field="*{userEmail}" type="email" class="form-control" id="userEmail"
-             name="userEmail">
+      <input
+          type="email"
+          class="form-control"
+          id="userEmail"
+          name="userEmail"
+          th:field="*{userEmail}"
+          th:classappend="${#fields.hasErrors('userEmail')} ? 'is-invalid' : ''"
+      >
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('userEmail')}" th:errors="*{userEmail}">
+        error
+      </div>
     </div>
     <div class="form-group">
       <label for="rol" th:text="#{users.form.role}">Rol</label>
-      <select class="form-control" id="rol" name="rol" th:field="*{rol}">
+      <select
+          class="form-control"
+          id="rol"
+          name="rol"
+          th:field="*{rol}"
+          th:classappend="${#fields.hasErrors('rol')} ? 'is-invalid' : ''"
+      >
         <option value=""></option>
         <option th:each="rol : ${userRoles}"
                 th:value="${rol.value}"
                 th:text="#{${rol.captionCode}}">--
         </option>
       </select>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('rol')}" th:errors="*{rol}">
+        error
+      </div>
     </div>
     <div class="form-group" th:if="${user.id == null}">
       <label for="password" th:text="#{users.form.password}">Clave</label>

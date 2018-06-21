@@ -1,6 +1,9 @@
 package spring.ticketing.model.data;
 
 import javax.annotation.Nonnull;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
 import spring.ticketing.model.AppUser;
 import spring.ticketing.model.AppUserRol;
@@ -10,12 +13,16 @@ public class AppUserData implements AppUser {
 
   private Integer id;
 
+  @NotEmpty
   @Nonnull
   private String userName;
 
+  @NotEmpty
+  @Email
   @Nonnull
   private String userEmail;
 
+  @NotNull
   @Nonnull
   private AppUserRol rol;
 
