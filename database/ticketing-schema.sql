@@ -7,3 +7,11 @@ CREATE TABLE app_user (
   PRIMARY KEY (id),
   UNIQUE (user_name)
 );
+
+CREATE TABLE client (
+  id          SERIAL,
+  app_user_id INTEGER      NOT NULL,
+  client_name VARCHAR(250) NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (app_user_id) REFERENCES app_user (id)
+);

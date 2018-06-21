@@ -1,0 +1,50 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head">
+</head>
+<body>
+<div class="container" th:replace="layout :: navbar">
+</div>
+<div class="container">
+  <div class="jumbotron">
+    <h1 class="display-4" th:text="#{clients.list.h1}">Clients</h1>
+    <hr class="my-4">
+    <a class="btn btn-primary btn-lg" href="" th:href="@{/clients/form}" role="button"
+       th:text="#{clients.list.createUser}">Crear</a>
+  </div>
+
+  <div th:replace="layout :: alerts">
+  </div>
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col" th:text="#{clients.list.id}">ID</th>
+      <th scope="col" th:text="#{clients.list.clientName}">clientName</th>
+      <th scope="col" th:text="#{clients.list.appUser}">appUser</th>
+      <th scope="col" style="width: 100px;"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="client : ${clients}">
+      <th scope="row" th:text="${client.id}">1</th>
+      <td th:text="${client.clientName}">clientName</td>
+      <td th:text="${client.appUser.userName}">appUSer</td>
+      <td>
+        <div class="btn-group btn-group-sm" role="group" aria-label="...">
+          <a class="btn btn-secondary" href="" role="button"
+             th:href="@{/clients/form/{id}(id=${client.id})}" th:text="#{global.edit}">Editar</a>
+          <a class="btn btn-danger" href="" role="button"
+             th:href="@{/clients/delete/{id}(id=${client.id})}"
+             onclick="return confirm('Estas seguro?')" th:text="#{global.delete}">Eliminar</a>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Before body close -->
+<th:block th:include="layout :: beforeBodyClose"/>
+</body>
+</html>
