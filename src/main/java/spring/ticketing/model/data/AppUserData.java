@@ -11,6 +11,7 @@ import spring.ticketing.model.AppUserRol;
 @Data
 public class AppUserData implements AppUser {
 
+  @NotNull
   private Integer id;
 
   @NotEmpty

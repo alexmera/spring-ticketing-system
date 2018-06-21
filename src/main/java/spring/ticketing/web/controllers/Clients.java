@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.validation.Valid;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,10 +18,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring.ticketing.model.AppUser;
 import spring.ticketing.model.AppUserRol;
 import spring.ticketing.model.Client;
-import spring.ticketing.model.data.ClientData;
 import spring.ticketing.services.AppUserService;
 import spring.ticketing.services.ClientsService;
 import spring.ticketing.web.model.Alerts;
+import spring.ticketing.web.model.ClientCommand;
 
 @Controller
 @RequestMapping("/clients")
@@ -44,7 +45,7 @@ public class Clients {
   public Client client(@PathVariable("id") Optional<Integer> id) {
     return id
         .flatMap(clientsService::findClientById)
-        .orElseGet(ClientData::new);
+        .orElseGet(ClientCommand::new);
   }
 
   @ModelAttribute("users")
@@ -73,12 +74,15 @@ public class Clients {
 
   @PostMapping("/save")
   public String save(
-      @ModelAttribute("client") ClientData client,
+      @Valid @ModelAttribute("client") ClientCommand client,
+      BindingResult clientResult,
       @ModelAttribute Alerts alerts,
-      BindingResult bindingResult,
       Locale locale,
       RedirectAttributes redirectAttributes
   ) {
+    if (clientResult.hasErrors()) {
+      return "client-form";
+    }
     if (client.getId() == null) {
       clientsService.createClient(client);
       alerts.succes(

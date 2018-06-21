@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring.ticketing.model.AppUser;
 import spring.ticketing.model.AppUserRol;
 import spring.ticketing.model.data.AppUserData;
 import spring.ticketing.services.AppUserService;
 import spring.ticketing.web.model.Alerts;
+import spring.ticketing.web.model.AppUserDraftCommand;
 import spring.ticketing.web.model.SelectOptions;
 
 @Controller
@@ -48,6 +48,11 @@ public class Users {
         .orElseGet(AppUserData::new);
   }
 
+  @ModelAttribute("userDraft")
+  public AppUserDraftCommand userDraft() {
+    return new AppUserDraftCommand();
+  }
+
   @ModelAttribute
   public Alerts alerts() {
     return new Alerts();
@@ -66,37 +71,42 @@ public class Users {
 
   @GetMapping("/form")
   public String form() {
-    return "user-form";
+    return "user-create-form";
+  }
+
+  @PostMapping("/create")
+  public String create(
+      @Valid @ModelAttribute("userDraft") AppUserDraftCommand user,
+      BindingResult userResult,
+      @ModelAttribute Alerts alerts,
+      Locale locale,
+      RedirectAttributes redirectAttributes
+  ) {
+    if (userResult.hasErrors()) {
+      return "user-create-form";
+    }
+    appUserService.createUser(user, user.getPassword());
+    alerts.succes(
+        messageSource.getMessage("users.msg.createOk", new Object[]{user.getUserName()}, locale));
+
+    redirectAttributes.addFlashAttribute("alerts", alerts);
+    return "redirect:/users";
   }
 
   @PostMapping("/save")
   public String save(
       @Valid @ModelAttribute("user") AppUserData user,
       BindingResult userResult,
-      @RequestParam("password") Optional<String> rawPassword,
-      Model model,
+      @ModelAttribute Alerts alerts,
       Locale locale,
       RedirectAttributes redirectAttributes
   ) {
-    Alerts alerts = new Alerts();
     if (userResult.hasErrors()) {
       return "user-form";
     }
-    if (user.getId() == null) {
-      if(rawPassword.get().isEmpty()) {
-        alerts.danger(
-            messageSource.getMessage("users.msg.passwordRequired", null, locale));
-        model.addAttribute("alerts", alerts);
-        return "user-form";
-      }
-      appUserService.createUser(user, rawPassword.get());
-      alerts.succes(
-          messageSource.getMessage("users.msg.createOk", new Object[]{user.getUserName()}, locale));
-    } else {
-      appUserService.updateUser(user);
-      alerts.succes(
-          messageSource.getMessage("users.msg.updateOk", new Object[]{user.getUserName()}, locale));
-    }
+    appUserService.updateUser(user);
+    alerts.succes(
+        messageSource.getMessage("users.msg.updateOk", new Object[]{user.getUserName()}, locale));
 
     redirectAttributes.addFlashAttribute("alerts", alerts);
     return "redirect:/users";

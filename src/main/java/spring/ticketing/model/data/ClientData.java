@@ -1,6 +1,8 @@
 package spring.ticketing.model.data;
 
 import javax.annotation.Nonnull;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
 import spring.ticketing.model.Client;
 import spring.ticketing.model.jpa.AppUserJpa;
@@ -10,9 +12,11 @@ public class ClientData implements Client {
 
   private Integer id;
 
+  @NotNull
   @Nonnull
   private AppUserJpa appUser;
 
+  @NotEmpty
   @Nonnull
   private String clientName;
 

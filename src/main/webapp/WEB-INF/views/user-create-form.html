@@ -13,7 +13,7 @@
   <div th:replace="layout :: alerts">
   </div>
 
-  <form th:action="@{/users/save}" th:object="${user}" method="post">
+  <form th:action="@{/users/create}" th:object="${userDraft}" method="post">
     <div class="form-group">
       <label for="userName" th:text="#{users.form.user}">Nombre de usuario</label>
       <input
@@ -58,6 +58,20 @@
         </option>
       </select>
       <div class="invalid-feedback" th:if="${#fields.hasErrors('rol')}" th:errors="*{rol}">
+        error
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="password" th:text="#{users.form.password}">Clave</label>
+      <input
+          type="password"
+          class="form-control"
+          id="password"
+          name="password"
+          th:field="*{password}"
+          th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''"
+      >
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
         error
       </div>
     </div>
