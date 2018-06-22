@@ -9,6 +9,11 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsertOperations;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import spring.ticketing.model.AppUser;
 import spring.ticketing.model.AppUserRol;
@@ -16,7 +21,7 @@ import spring.ticketing.model.data.AppUserData;
 import spring.ticketing.repositories.AppUserDao;
 
 @Repository
-public class AppUserJdbcDao implements AppUserDao {
+public class AppUserJdbcDao implements AppUserDao, UserDetailsService {
 
   private static final RowMapper<AppUser> rowMapper = (rs, rowNum) -> new AppUserData(
       rs.getInt("id"),
@@ -26,13 +31,16 @@ public class AppUserJdbcDao implements AppUserDao {
   );
   private final JdbcOperations jdbc;
   private final SimpleJdbcInsertOperations jdbcInsert;
+  private final PasswordEncoder passwordEncoder;
 
   public AppUserJdbcDao(
       JdbcOperations jdbc,
-      @Qualifier("appUserJdbcInsert") SimpleJdbcInsertOperations jdbcInsert
+      @Qualifier("appUserJdbcInsert") SimpleJdbcInsertOperations jdbcInsert,
+      PasswordEncoder passwordEncoder
   ) {
     this.jdbc = jdbc;
     this.jdbcInsert = jdbcInsert;
+    this.passwordEncoder = passwordEncoder;
   }
 
   @Override
@@ -41,8 +49,7 @@ public class AppUserJdbcDao implements AppUserDao {
     args.put("user_name", entity.getUserName());
     args.put("user_email", entity.getUserEmail());
     args.put("rol", entity.getRol().name());
-    // FIXME DANGER!!!!!!!!!
-    args.put("password", rawPassword);
+    args.put("password", passwordEncoder.encode(rawPassword));
 
     Number id = jdbcInsert.executeAndReturnKey(args);
     return getOne(id.intValue());
@@ -96,5 +103,16 @@ public class AppUserJdbcDao implements AppUserDao {
     throw new IllegalStateException(
         "The delete operation must affect exactly one row. Rows affected " + num
     );
+  }
+
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    Map<String, Object> data =
+        jdbc.queryForMap("SELECT * FROM app_user WHERE user_name = ?", username);
+    return User.builder()
+        .username(data.get("user_name").toString())
+        .password(data.get("password").toString())
+        .authorities(data.get("rol").toString())
+        .build();
   }
 }
