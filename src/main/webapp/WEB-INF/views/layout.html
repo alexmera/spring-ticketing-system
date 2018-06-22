@@ -37,6 +37,8 @@
            th:text="#{nav.createTicket}">createTicket</a>
         <a class="ml-2 nav-item btn btn-secondary" th:href="${#locale.language == 'es'} ? '?lang=en' : '?lang=es'" role="button"
            th:text="${#locale.language == 'es'} ? 'English' : 'Español '">createTicket</a>
+        <a class="ml-2 nav-item btn btn-default" href="#" role="button" th:href="@{/logout}"
+           th:text="#{nav.logout}">logout</a>
       </div>
     </div>
   </nav>

@@ -5,6 +5,7 @@ import spring.ticketing.config.AppConfig;
 import spring.ticketing.config.DataSourceConfig;
 import spring.ticketing.config.JpaConfig;
 import spring.ticketing.config.MvcConfig;
+import spring.ticketing.config.WebSecurityConfig;
 
 public class AppDispatcherServletInitializer
     extends AbstractAnnotationConfigDispatcherServletInitializer {
@@ -14,7 +15,8 @@ public class AppDispatcherServletInitializer
     return new Class[]{
         AppConfig.class,
         DataSourceConfig.class,
-        JpaConfig.class
+        JpaConfig.class,
+        WebSecurityConfig.class
     };
   }
 
