@@ -2,6 +2,10 @@ package spring.ticketing.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
+import org.springframework.security.access.vote.RoleHierarchyVoter;
+import org.springframework.security.access.vote.RoleVoter;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -41,5 +45,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  public RoleHierarchy roleHierarchy() {
+    RoleHierarchyImpl hierarchy = new RoleHierarchyImpl();
+    hierarchy.setHierarchy("COORDINATOR > OPERATOR and OPERATOR > CLIENT");
+    return hierarchy;
+  }
+
+  @Bean
+  public RoleVoter roleVoter() {
+    return new RoleHierarchyVoter(roleHierarchy());
+  }
+
+  public void setUserDetailsService(UserDetailsService userDetailsService) {
+    this.userDetailsService = userDetailsService;
   }
 }
