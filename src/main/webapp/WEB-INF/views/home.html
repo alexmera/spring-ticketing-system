@@ -7,6 +7,10 @@
 </div>
 <div class="container">
   <h1>¡HOLA <span th:text="${principalName}">?</span>!</h1>
+  <p>
+    Logged user: <span sec:authentication="name">Bob</span></br>
+    Authorities / Roles: <span sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</span>
+  </p>
 </div>
 
 <!-- Before body close -->

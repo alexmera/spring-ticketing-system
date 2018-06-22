@@ -15,6 +15,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
@@ -68,6 +69,7 @@ public class MvcConfig implements WebMvcConfigurer {
   public SpringTemplateEngine templateEngine() {
     SpringTemplateEngine engine = new SpringTemplateEngine();
     engine.setTemplateResolver(templateResolver());
+    engine.addDialect(new SpringSecurityDialect());
     return engine;
   }
 
