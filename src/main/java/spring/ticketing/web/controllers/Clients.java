@@ -50,10 +50,7 @@ public class Clients {
 
   @ModelAttribute("users")
   public List<AppUser> clientUsers() {
-    return appUserService.allUsers()
-        .stream()
-        .filter(u -> u.getRol().equals(AppUserRol.CLIENT))
-        .collect(Collectors.toList());
+    return appUserService.findUserByRol(AppUserRol.CLIENT);
   }
 
   @ModelAttribute

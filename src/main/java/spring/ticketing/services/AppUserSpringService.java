@@ -6,6 +6,7 @@ import javax.annotation.Nonnull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.ticketing.model.AppUser;
+import spring.ticketing.model.AppUserRol;
 import spring.ticketing.model.jpa.AppUserJpa;
 import spring.ticketing.repositories.AppUserDao;
 import spring.ticketing.repositories.jpa.AppUserRepository;
@@ -23,6 +24,7 @@ public class AppUserSpringService implements AppUserService {
 
   @Nonnull
   @Override
+  @SuppressWarnings("unchecked")
   public List<AppUserJpa> allUsers() {
     return appUserRepository.findAll();
   }
@@ -54,5 +56,17 @@ public class AppUserSpringService implements AppUserService {
     AppUserJpa appUser = appUserRepository.getOne(id);
     appUserRepository.deleteById(id);
     return appUser;
+  }
+
+  @Nonnull
+  @Override
+  public AppUser findUserByUserName(String userName) {
+    return appUserRepository.findByUserName(userName);
+  }
+
+  @Nonnull
+  @Override
+  public List<AppUserJpa> findUserByRol(AppUserRol rol) {
+    return appUserRepository.findByRol(rol);
   }
 }
