@@ -47,7 +47,9 @@
         >tickets</a>
       </div>
       <div class="navbar-nav">
-        <a class="ml-2 nav-item btn btn-primary" href="#" role="button"
+        <a class="ml-2 nav-item btn btn-primary" href="" role="button"
+           sec:authorize-url="/tickets/report"
+           th:href="@{/tickets/report}"
            th:text="#{nav.createTicket}">createTicket</a>
         <a class="ml-2 nav-item btn btn-secondary"
            th:href="${#locale.language == 'es'} ? '?lang=en' : '?lang=es'" role="button"

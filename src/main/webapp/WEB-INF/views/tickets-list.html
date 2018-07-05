@@ -1,0 +1,56 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head">
+</head>
+<body>
+<div class="container" th:replace="layout :: navbar">
+</div>
+<div class="container">
+  <div class="jumbotron">
+    <h1 class="display-4" th:text="#{tickets.list.h1}">tickets</h1>
+    <hr class="my-4">
+    <a class="btn btn-primary btn-lg" href="" th:href="@{/tickets/report}" role="button"
+       th:text="#{tickets.list.createTicket}">report</a>
+  </div>
+
+  <div th:replace="layout :: alerts">
+  </div>
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col" th:text="#{tickets.list.id}">ID</th>
+      <th scope="col" th:text="#{tickets.list.subject}">subject</th>
+      <th scope="col" th:text="#{tickets.list.client}">client</th>
+      <th scope="col" th:text="#{tickets.list.operator}">operator</th>
+      <th scope="col" th:text="#{tickets.list.status}">status</th>
+      <th scope="col" th:text="#{tickets.list.creationDate}">creationDate</th>
+      <th scope="col" style="width: 100px;"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="ticket : ${tickets}">
+      <th scope="row" th:text="${ticket.id}">1</th>
+      <td th:text="${ticket.subject}">subject</td>
+      <td th:text="${ticket.client.clientName}">clientName</td>
+      <td th:text="${ticket.operator.userName}">userName</td>
+      <td th:text="#{${statuses.captionCode(ticket.status)}}">status</td>
+      <td th:text="${ticket.creationDate}">creationDate</td>
+      <td>
+        <div class="btn-group btn-group-sm" role="group" aria-label="...">
+          <a class="btn btn-secondary" href="" role="button"
+             th:href="@{/tickets/update/{id}(id=${ticket.id})}" th:text="#{global.update}">Editar</a>
+          <a class="btn btn-primary" href="" role="button"
+             th:href="@{/tickets/details/{id}(id=${ticket.id})}"
+             th:text="#{global.details}">details</a>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Before body close -->
+<th:block th:include="layout :: beforeBodyClose"/>
+</body>
+</html>

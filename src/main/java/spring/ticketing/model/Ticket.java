@@ -4,28 +4,16 @@ import java.time.LocalDateTime;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public interface Ticket {
+public interface Ticket extends TicketDraft {
 
   @Nonnull
   Integer getId();
-
-  @Nonnull
-  Client getClient();
 
   @Nonnull
   AppUser getOperator();
 
   @Nullable
   AppUser getCoordinator();
-
-  @Nonnull
-  TicketChannel getChannel();
-
-  @Nonnull
-  String getContactName();
-
-  @Nonnull
-  String getSubject();
 
   @Nullable
   String getDescription();
@@ -37,10 +25,10 @@ public interface Ticket {
   Resolution getResolution();
 
   @Nullable
-  String getSolution();
+  String getResolutionInfo();
 
   @Nonnull
-  Boolean isEscalated();
+  boolean isEscalated();
 
   @Nonnull
   LocalDateTime getCreationDate();

@@ -33,4 +33,14 @@ public class ClientData implements Client {
     this.appUser = appUser;
     this.clientName = clientName;
   }
+
+  private ClientData(Client other) {
+    this.id = other.getId();
+    this.appUser = AppUserJpa.from(other.getAppUser());
+    this.clientName = other.getClientName();
+  }
+
+  public static ClientData from(Client other) {
+    return new ClientData(other);
+  }
 }

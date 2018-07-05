@@ -1,5 +1,7 @@
 package spring.ticketing.web;
 
+import javax.servlet.Filter;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 import spring.ticketing.config.AppConfig;
 import spring.ticketing.config.DataSourceConfig;
@@ -28,5 +30,12 @@ public class AppDispatcherServletInitializer
   @Override
   protected String[] getServletMappings() {
     return new String[]{"/"};
+  }
+
+  @Override
+  protected Filter[] getServletFilters() {
+    CharacterEncodingFilter encodingFilter =
+        new CharacterEncodingFilter("UTF-8", true);
+    return new Filter[]{encodingFilter};
   }
 }

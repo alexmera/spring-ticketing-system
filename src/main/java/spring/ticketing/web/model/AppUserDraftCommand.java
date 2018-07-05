@@ -3,11 +3,15 @@ package spring.ticketing.web.model;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import spring.ticketing.model.AppUser;
 import spring.ticketing.model.AppUserRol;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class AppUserDraftCommand implements AppUser {
 
   private Integer id;

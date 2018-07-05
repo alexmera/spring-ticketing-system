@@ -3,10 +3,9 @@ package spring.ticketing.services;
 import java.util.List;
 import java.util.Optional;
 import javax.annotation.Nonnull;
-import org.springframework.stereotype.Service;
 import spring.ticketing.model.AppUser;
+import spring.ticketing.model.AppUserRol;
 
-@Service
 public interface AppUserService {
 
   @Nonnull
@@ -23,5 +22,11 @@ public interface AppUserService {
 
   @Nonnull
   AppUser deleteUser(Integer id);
+
+  @Nonnull
+  AppUser findUserByUserName(String userName);
+
+  @Nonnull
+  <T extends AppUser> List<T> findUserByRol(AppUserRol rol);
 
 }

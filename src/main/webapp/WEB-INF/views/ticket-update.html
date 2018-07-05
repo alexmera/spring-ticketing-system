@@ -1,0 +1,106 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head">
+</head>
+<body>
+<div class="container" th:replace="layout :: navbar">
+</div>
+<div class="container">
+  <div class="jumbotron">
+    <h1 class="display-4" th:text="#{tickets.update.h1}">Crear</h1>
+  </div>
+  <form th:action="@{/tickets/update}" th:object="${ticketUpdateDraft}" method="post">
+    <div class="form-group">
+      <label for="subject" th:text="#{tickets.form.subject}">subject</label>
+      <input
+          type="text"
+          class="form-control"
+          id="subject"
+          name="subject"
+          th:field="*{subject}"
+          th:classappend="${#fields.hasErrors('subject')} ? 'is-invalid' : ''"
+      >
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('subject')}" th:errors="*{subject}">
+        error
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="contactName" th:text="#{tickets.form.contactName}">contactName</label>
+      <input
+          type="text"
+          class="form-control"
+          id="contactName"
+          name="contactName"
+          th:field="*{contactName}"
+          th:classappend="${#fields.hasErrors('contactName')} ? 'is-invalid' : ''"
+      >
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('contactName')}" th:errors="*{contactName}">
+        error
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="description" th:text="#{tickets.form.description}">description</label>
+      <textarea
+          rows="4"
+          class="form-control"
+          id="description"
+          name="description"
+          th:field="*{description}"
+          th:classappend="${#fields.hasErrors('description')} ? 'is-invalid' : ''"
+      >
+      </textarea>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">
+        error
+      </div>
+    </div>
+    <div class="form-group">
+      <label th:for="${#ids.next('client.id')}" th:text="#{tickets.form.client}">client</label>
+      <select
+          class="form-control"
+          th:field="*{client.id}"
+          th:classappend="${#fields.hasErrors('client.id')} ? 'is-invalid' : ''"
+      >
+        <option value=""></option>
+        <option th:each="client : ${clients}"
+                th:value="${client.id}"
+                th:text="${client.clientName}">--
+        </option>
+      </select>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('client.id')}" th:errors="*{client.id}">
+        error
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="channel" th:text="#{tickets.form.channel}">channel</label>
+      <select
+          class="form-control"
+          id="channel"
+          name="channel"
+          th:field="*{channel}"
+          th:classappend="${#fields.hasErrors('channel')} ? 'is-invalid' : ''"
+      >
+        <option value=""></option>
+        <option th:each="channel : ${channels}"
+                th:value="${channel.value}"
+                th:text="#{${channel.captionCode}}">--
+        </option>
+      </select>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('channel')}" th:errors="*{channel}">
+        error
+      </div>
+    </div>
+    <input type="hidden" th:field="*{id}"/>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-primary" th:text="#{global.update}">update</button>
+        <a class="btn btn-default" href="#" th:href="@{/tickets}" role="button"
+           th:text="#{global.cancel}">cancel</a>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- Before body close -->
+<th:block th:include="layout :: beforeBodyClose"/>
+</body>
+</html>
