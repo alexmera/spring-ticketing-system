@@ -34,7 +34,8 @@
           th:field="*{contactName}"
           th:classappend="${#fields.hasErrors('contactName')} ? 'is-invalid' : ''"
       >
-      <div class="invalid-feedback" th:if="${#fields.hasErrors('contactName')}" th:errors="*{contactName}">
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('contactName')}"
+           th:errors="*{contactName}">
         error
       </div>
     </div>
@@ -49,7 +50,8 @@
           th:classappend="${#fields.hasErrors('description')} ? 'is-invalid' : ''"
       >
       </textarea>
-      <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}"
+           th:errors="*{description}">
         error
       </div>
     </div>
@@ -66,7 +68,8 @@
                 th:text="${client.clientName}">--
         </option>
       </select>
-      <div class="invalid-feedback" th:if="${#fields.hasErrors('client.id')}" th:errors="*{client.id}">
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('client.id')}"
+           th:errors="*{client.id}">
         error
       </div>
     </div>
@@ -90,16 +93,22 @@
       </div>
     </div>
     <input type="hidden" th:field="*{id}"/>
-    <div class="form-group">
-      <div class="col-sm-offset-2 col-sm-10">
-        <button type="submit" class="btn btn-primary" th:text="#{global.update}">update</button>
-        <a class="btn btn-default" href="#" th:href="@{/tickets}" role="button"
-           th:text="#{global.cancel}">cancel</a>
+    <hr class="my-2">
+    <div class="card">
+      <div class="card-body">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn btn-primary" th:text="#{global.update}">update</button>
+          <a class="btn btn-danger" href="#"
+             th:href="@{/tickets/delete/{id}(id=${ticketUpdateDraft.id})}" role="button"
+             onclick="return confirm('Estas seguro?')" th:text="#{global.delete}">delete</a>
+          <a class="btn btn-default" href="#" th:href="@{/tickets}" role="button"
+             th:text="#{global.cancel}">cancel</a>
+        </div>
       </div>
     </div>
   </form>
 </div>
-
+<p></p>
 <!-- Before body close -->
 <th:block th:include="layout :: beforeBodyClose"/>
 </body>
