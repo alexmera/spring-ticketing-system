@@ -91,13 +91,15 @@ public class Tickets {
   public String report(
       @ModelAttribute("authUser") AppUser authUser,
       @Valid @ModelAttribute("ticketDraft") TicketDraftCommand ticketDraft,
-      BindingResult result
+      BindingResult result,
+      Model model
   ) {
     if (result.hasErrors()) {
       return "report-form";
     }
-    ticketsService.reportTicket(ticketDraft, authUser.getId());
-    return "redirect:/tickets";
+    Ticket ticket = ticketsService.reportTicket(ticketDraft, authUser.getId());
+    model.addAttribute("id", ticket.getId());
+    return "redirect:/tickets/update/{id}";
   }
 
   @GetMapping("/update/{id}")
@@ -127,5 +129,12 @@ public class Tickets {
         ticketUpdate.getDescription()
     );
     return "redirect:/tickets";
+  }
+
+  @GetMapping("/details/{id}")
+  public String details(@PathVariable("id") Integer id, Model model) {
+    Ticket ticket = ticketsService.findTicketById(id).get();
+    model.addAttribute("ticket", ticket);
+    return "ticket-detail";
   }
 }

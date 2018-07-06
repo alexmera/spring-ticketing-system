@@ -1,0 +1,66 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head">
+</head>
+<body>
+<div class="container" th:replace="layout :: navbar">
+</div>
+<div class="container">
+  <div class="jumbotron">
+    <h1 th:text="${ticket.subject}">tickets</h1>
+    <h5>
+      <span class="badge badge-primary" th:text="${ticket.id}"></span>
+      <span class="badge badge-success" th:text="#{${statuses.captionCode(ticket.status)}}"></span>
+      <span class="badge badge-info" th:text="#{${channels.captionCode(ticket.channel)}}"></span>
+      <span class="badge badge-primary" th:if="${ticket.resolution}"
+            th:text="#{${resolutions.captionCode(ticket.resolution)}}"></span>
+      <span class="badge badge-secondary" th:text="${ticket.client.clientName}"></span>
+    </h5>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <dl>
+        <dt th:if="${ticket.description}" th:text="#{tickets.form.description}"></dt>
+        <dd th:if="${ticket.description}" th:text="${ticket.description}"></dd>
+
+        <dt th:text="#{tickets.form.contactName}"></dt>
+        <dd th:text="${ticket.contactName}"></dd>
+
+        <dt th:text="#{tickets.form.operator}"></dt>
+        <dd th:text="${ticket.operator.userName}"></dd>
+
+        <dt th:if="${ticket.coordinator}" th:text="#{tickets.form.coordinator}"></dt>
+        <dd th:if="${ticket.coordinator}" th:text="${ticket.coordinator.userName}"></dd>
+
+        <dt th:if="${ticket.resolutionInfo}" th:text="#{tickets.form.resolutionInfo}"></dt>
+        <dd th:if="${ticket.resolutionInfo}" th:text="${ticket.resolutionInfo}"></dd>
+
+        <dt th:text="#{tickets.form.creationDate}"></dt>
+        <dd th:text="${ticket.creationDate}"></dd>
+
+        <dt th:text="#{tickets.form.modificationDate}"></dt>
+        <dd th:text="${ticket.modificationDate}"></dd>
+
+        <dt th:if="${ticket.closingDate}" th:text="#{tickets.form.closingDate}"></dt>
+        <dd th:if="${ticket.closingDate}" th:text="${ticket.closingDate}"></dd>
+      </dl>
+    </div>
+  </div>
+  <hr class="my-2">
+  <div class="card">
+    <div class="card-body">
+      <div class="col-sm-offset-2 col-sm-10">
+        <a role="button" class="btn btn-primary"
+           th:href="@{/tickets/update/{id}(id=${ticket.id})}"
+           th:text="#{global.update}">update</a>
+        <a class="btn btn-default" href="" th:href="@{/tickets}" role="button"
+           th:text="#{global.back}">back</a>
+      </div>
+    </div>
+  </div>
+</div>
+<p></p>
+<!-- Before body close -->
+<th:block th:include="layout :: beforeBodyClose"/>
+</body>
+</html>
