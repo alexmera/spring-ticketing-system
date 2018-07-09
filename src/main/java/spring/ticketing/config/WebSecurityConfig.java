@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Autowired
@@ -27,7 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     http
         .authorizeRequests()
         .antMatchers("/users/**", "/clients/**").hasAuthority("COORDINATOR")
-        .antMatchers("/tickets/delete/{id}").hasAuthority("COORDINATOR")
+//        .antMatchers("/tickets/delete/{id}").hasAuthority("COORDINATOR")
         .antMatchers("/tickets/**").hasAuthority("OPERATOR")
         .anyRequest().authenticated()
         .and()
