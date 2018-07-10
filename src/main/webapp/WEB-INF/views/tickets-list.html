@@ -29,7 +29,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="ticket : ${tickets}">
+    <tr th:each="ticket : ${page}">
       <th scope="row" th:text="${ticket.id}">1</th>
       <td th:text="${ticket.subject}">subject</td>
       <td th:text="${ticket.client.clientName}">clientName</td>
@@ -39,7 +39,8 @@
       <td>
         <div class="btn-group btn-group-sm" role="group" aria-label="...">
           <a class="btn btn-secondary" href="" role="button"
-             th:href="@{/tickets/update/{id}(id=${ticket.id})}" th:text="#{global.update}">Editar</a>
+             th:href="@{/tickets/update/{id}(id=${ticket.id})}"
+             th:text="#{global.update}">Editar</a>
           <a class="btn btn-primary" href="" role="button"
              th:href="@{/tickets/details/{id}(id=${ticket.id})}"
              th:text="#{global.details}">details</a>
@@ -48,8 +49,49 @@
     </tr>
     </tbody>
   </table>
-</div>
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+      <li class="page-item">
+        <a
+            class="page-link"
+            href="#"
+            th:if="${page.hasPrevious()}"
+            th:href="@{/tickets(page=${page.number - 1})}"
+            th:text="#{nav.previous}"
+        >
+          Previous
+        </a>
+      </li>
+      <li
+          class="page-item"
+          th:classappend="${page.number == numPage} ? 'active' : ''"
+          th:each="numPage : ${#numbers.sequence(0, page.totalPages - 1)}"
+      >
+        <a
+            class="page-link"
+            href="#"
 
+            th:href="@{/tickets(page=${numPage})}"
+            th:text="${numPage + 1}"
+        >
+          1
+        </a>
+      </li>
+      <li class="page-item">
+        <a
+            class="page-link"
+            href="#"
+            th:if="${page.hasNext()}"
+            th:href="@{/tickets(page=${page.number + 1})}"
+            th:text="#{nav.next}"
+        >
+          Next
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+<p></p>
 <!-- Before body close -->
 <th:block th:include="layout :: beforeBodyClose"/>
 </body>

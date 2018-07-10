@@ -4,7 +4,8 @@ import java.security.Principal;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.data.domain.Page;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import spring.ticketing.model.AppUser;
 import spring.ticketing.model.AppUserRol;
 import spring.ticketing.model.Client;
@@ -76,10 +78,21 @@ public class Tickets {
   }
 
   @GetMapping
-  public String tickets(@ModelAttribute("authUser") AppUser authUser, Model model) {
+  public String tickets(
+      @ModelAttribute("authUser") AppUser authUser,
+      @RequestParam(value = "page", defaultValue = "0") Integer page,
+      @RequestParam(value = "size", defaultValue = "10", required = false) Integer size,
+      Model model
+  ) {
     Integer operatorId = authUser.getRol().equals(AppUserRol.COORDINATOR) ? null : authUser.getId();
-    Page<Ticket> tickets = ticketsService.findTickets(operatorId, null, null, null);
-    model.addAttribute("tickets", tickets);
+    Page<Ticket> tickets = ticketsService
+        .findTickets(
+            operatorId,
+            null,
+            null,
+            PageRequest.of(page, size, Direction.DESC, "creationDate")
+        );
+    model.addAttribute("page", tickets);
     return "tickets-list";
   }
 
@@ -120,7 +133,6 @@ public class Tickets {
     if (result.hasErrors()) {
       return "ticket-update";
     }
-    System.out.println(ticketUpdate);
     ticketsService.updateTicket(
         ticketUpdate.getId(),
         ticketUpdate.getClient().getId(),
