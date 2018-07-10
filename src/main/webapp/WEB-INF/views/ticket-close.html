@@ -1,0 +1,111 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head">
+</head>
+<body>
+<div class="container" th:replace="layout :: navbar">
+</div>
+<div class="container">
+  <div class="jumbotron">
+    <h1 th:text="${ticket.subject}">tickets</h1>
+    <h5>
+      <span class="badge badge-primary" th:text="${ticket.id}"></span>
+      <span class="badge badge-success" th:text="#{${statuses.captionCode(ticket.status)}}"></span>
+      <span class="badge badge-info" th:text="#{${channels.captionCode(ticket.channel)}}"></span>
+      <span class="badge badge-primary" th:if="${ticket.resolution}"
+            th:text="#{${resolutions.captionCode(ticket.resolution)}}"></span>
+      <span class="badge badge-secondary" th:text="${ticket.client.clientName}"></span>
+    </h5>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <dl>
+        <dt th:if="${ticket.description}" th:text="#{tickets.form.description}"></dt>
+        <dd th:if="${ticket.description}" th:text="${ticket.description}"></dd>
+
+        <dt th:text="#{tickets.form.contactName}"></dt>
+        <dd th:text="${ticket.contactName}"></dd>
+
+        <dt th:text="#{tickets.form.operator}"></dt>
+        <dd th:text="${ticket.operator.userName}"></dd>
+
+        <dt th:if="${ticket.coordinator}" th:text="#{tickets.form.coordinator}"></dt>
+        <dd th:if="${ticket.coordinator}" th:text="${ticket.coordinator.userName}"></dd>
+
+        <dt th:if="${ticket.resolutionInfo}" th:text="#{tickets.form.resolutionInfo}"></dt>
+        <dd th:if="${ticket.resolutionInfo}" th:text="${ticket.resolutionInfo}"></dd>
+
+        <dt th:text="#{tickets.form.creationDate}"></dt>
+        <dd th:text="${ticket.creationDate}"></dd>
+
+        <dt th:text="#{tickets.form.modificationDate}"></dt>
+        <dd th:text="${ticket.modificationDate}"></dd>
+
+        <dt th:if="${ticket.closingDate}" th:text="#{tickets.form.closingDate}"></dt>
+        <dd th:if="${ticket.closingDate}" th:text="${ticket.closingDate}"></dd>
+      </dl>
+    </div>
+  </div>
+  <hr class="my-2">
+  <form th:action="@{/tickets/close}" th:object="${ticketClose}" method="post">
+    <div class="form-group">
+      <label for="resolution" th:text="#{tickets.form.resolution}">resolution</label>
+      <select
+          class="form-control"
+          id="resolution"
+          name="resolution"
+          th:field="*{resolution}"
+          th:classappend="${#fields.hasErrors('resolution')} ? 'is-invalid' : ''"
+      >
+        <option value=""></option>
+        <option th:each="resolution : ${resolutions}"
+                th:value="${resolution.value}"
+                th:text="#{${resolution.captionCode}}">--
+        </option>
+      </select>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('resolution')}"
+           th:errors="*{resolution}">
+        error
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="resolutionInfo" th:text="#{tickets.form.resolutionInfo}">resolutionInfo</label>
+      <textarea
+          rows="4"
+          class="form-control"
+          id="resolutionInfo"
+          name="resolutionInfo"
+          th:field="*{resolutionInfo}"
+          th:classappend="${#fields.hasErrors('resolutionInfo')} ? 'is-invalid' : ''"
+      >
+      </textarea>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('resolutionInfo')}"
+           th:errors="*{resolutionInfo}">
+        error
+      </div>
+    </div>
+    <input type="hidden" th:field="*{id}"/>
+    <hr class="my-2">
+    <div class="card">
+      <div class="card-body">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn btn-success" th:text="#{global.close}">close</button>
+          <a
+              class="btn btn-default"
+              href="#"
+              role="button"
+              th:href="@{/tickets/details/{id}(id=${ticketClose.id})}"
+              th:text="#{global.cancel}"
+          >
+            cancel
+          </a>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<p></p>
+<!-- Before body close -->
+<th:block th:include="layout :: beforeBodyClose"/>
+</body>
+</html>

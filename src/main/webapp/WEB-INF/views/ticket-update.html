@@ -97,10 +97,21 @@
     <div class="card">
       <div class="card-body">
         <div class="col-sm-offset-2 col-sm-10">
-          <button type="submit" class="btn btn-primary" th:text="#{global.update}">update</button>
+          <button
+              type="submit"
+              class="btn btn-primary"
+              th:if="${ticket.status.name() == 'OPEN'}"
+              th:text="#{global.update}"
+          >
+            update
+          </button>
           <a class="btn btn-danger" href="#"
              th:href="@{/tickets/delete/{id}(id=${ticketUpdateDraft.id})}" role="button"
              onclick="return confirm('Estas seguro?')" th:text="#{global.delete}">delete</a>
+          <a class="btn btn-success" href="#"
+             th:href="@{/tickets/close/{id}(id=${ticketUpdateDraft.id})}" role="button"
+             th:if="${ticket.status.name() == 'OPEN'}"
+             th:text="#{global.close}">close</a>
           <a class="btn btn-default" href="#" th:href="@{/tickets}" role="button"
              th:text="#{global.cancel}">cancel</a>
         </div>

@@ -25,7 +25,9 @@ import spring.ticketing.model.TicketStatus;
 import spring.ticketing.services.AppUserService;
 import spring.ticketing.services.ClientsService;
 import spring.ticketing.services.TicketsService;
+import spring.ticketing.web.model.InvalidOperationException;
 import spring.ticketing.web.model.SelectOptions;
+import spring.ticketing.web.model.TicketCloseCommand;
 import spring.ticketing.web.model.TicketDraftCommand;
 import spring.ticketing.web.model.TicketUpdateCommand;
 
@@ -121,6 +123,7 @@ public class Tickets {
     Ticket ticket = ticketsService.findTicketById(id).get();
     TicketUpdateCommand ticketUpdate = TicketUpdateCommand.from(ticket);
     model.addAttribute("ticketUpdateDraft", ticketUpdate);
+    model.addAttribute("ticket", ticket);
     return "ticket-update";
   }
 
@@ -132,6 +135,10 @@ public class Tickets {
   ) {
     if (result.hasErrors()) {
       return "ticket-update";
+    }
+    Ticket ticket = ticketsService.findTicketById(ticketUpdate.getId()).get();
+    if (!ticket.getStatus().equals(TicketStatus.OPEN)) {
+      throw new InvalidOperationException("The ticket to update must be open");
     }
     ticketsService.updateTicket(
         ticketUpdate.getId(),
@@ -154,6 +161,38 @@ public class Tickets {
   @GetMapping("/delete/{id}")
   public String delete(@PathVariable("id") Integer id) {
     ticketsService.deleteTicket(id);
+    return "redirect:/tickets";
+  }
+
+  @GetMapping("/close/{id}")
+  public String closeForm(@PathVariable("id") Integer id, Model model) {
+    Ticket ticket = ticketsService.findTicketById(id).get();
+    TicketCloseCommand ticketClose = TicketCloseCommand.from(ticket);
+    model.addAttribute("ticket", ticket);
+    model.addAttribute("ticketClose", ticketClose);
+    return "ticket-close";
+  }
+
+  @PostMapping("/close")
+  public String close(
+      @Valid @ModelAttribute("ticketClose") TicketCloseCommand command,
+      BindingResult result,
+      Model model
+  ) {
+    if (result.hasErrors()) {
+      Ticket ticket = ticketsService.findTicketById(command.getId()).get();
+      model.addAttribute("ticket", ticket);
+      return "ticket-close";
+    }
+    Ticket ticket = ticketsService.findTicketById(command.getId()).get();
+    if (!ticket.getStatus().equals(TicketStatus.OPEN)) {
+      throw new InvalidOperationException("The ticket to close must be open");
+    }
+    ticketsService.closeTicket(
+        command.getId(),
+        command.getResolution(),
+        command.getResolutionInfo()
+    );
     return "redirect:/tickets";
   }
 }

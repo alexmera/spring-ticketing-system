@@ -138,6 +138,7 @@ public class TicketsSpringService implements TicketsService {
     TicketJpa ticket = ticketRepository.getOne(ticketId);
     ticket.setResolution(resolution);
     ticket.setResolutionInfo(resolutionInfo);
+    ticket.setStatus(TicketStatus.CLOSED);
     ticket.setClosingDate(LocalDateTime.now());
     return ticketRepository.saveAndFlush(ticket);
   }
