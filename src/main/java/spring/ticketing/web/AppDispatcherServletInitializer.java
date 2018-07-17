@@ -7,6 +7,7 @@ import spring.ticketing.config.AppConfig;
 import spring.ticketing.config.DataSourceConfig;
 import spring.ticketing.config.JpaConfig;
 import spring.ticketing.config.MvcConfig;
+import spring.ticketing.config.SessionConfig;
 import spring.ticketing.config.WebSecurityConfig;
 
 public class AppDispatcherServletInitializer
@@ -18,7 +19,8 @@ public class AppDispatcherServletInitializer
         AppConfig.class,
         DataSourceConfig.class,
         JpaConfig.class,
-        WebSecurityConfig.class
+        WebSecurityConfig.class,
+        SessionConfig.class
     };
   }
 

@@ -16,6 +16,7 @@ dependencies {
     compile 'org.springframework.security:spring-security-web:5.0.6.RELEASE'
     compile 'org.springframework.security:spring-security-config:5.0.6.RELEASE'
     compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity4:3.0.2.RELEASE'
+    compile 'org.springframework.session:spring-session-jdbc:2.0.4.RELEASE'
 
     compileOnly 'org.projectlombok:lombok:1.18.0'
 
