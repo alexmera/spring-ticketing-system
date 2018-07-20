@@ -1,0 +1,5 @@
+<Context 
+  docBase="${catalina.base}/ticketing"
+  path="" 
+  reloadable="true" 
+/>

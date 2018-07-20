@@ -22,6 +22,7 @@ public class DataSourceConfig {
     config.setJdbcUrl(environment.getProperty("db.jdbcUrl"));
     config.setUsername(environment.getProperty("db.username"));
     config.setPassword(environment.getProperty("db.password"));
+    config.setDriverClassName(environment.getProperty("db.driverClassName"));
     return config;
   }
 

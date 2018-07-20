@@ -1,0 +1,4 @@
+Tomcat Version: 9.0.10
+
+NOTA:
+Sí se actualiza la versión del Tomcat, tambien se debe actualizar: bin/tomcat-juli.jar

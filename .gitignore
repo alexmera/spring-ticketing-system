@@ -1,5 +1,10 @@
 *.iml
 
+build/
 out/
 .gradle/
 .idea/
+
+catalina_base/logs
+catalina_base/work
+catalina_base/ticketing

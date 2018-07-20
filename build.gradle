@@ -27,3 +27,8 @@ dependencies {
 repositories {
     jcenter()
 }
+
+task explodedWar(type: Sync) {
+    into "${buildDir}/exploded"
+    with war
+}
